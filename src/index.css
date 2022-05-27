@@ -1,0 +1,61 @@
+body {
+  margin: 0;
+}
+
+.navbar {
+  margin-bottom: 0px;
+  border-radius: 0px;
+}
+
+.col1 {
+  background-color: rgba(8, 8, 8, 0.986);
+  height: calc(100vh - 148px);
+  color: white;   
+}
+
+.col2 {
+  background-color: black;
+  height: calc(100vh - 148px);
+  padding: 0px;
+  color: white;
+  overflow-x: scroll;
+}
+
+.react-codemirror2 .CodeMirror:nth-child(1) {
+  display: none;
+}
+
+.CodeMirror {
+  height: 150px !important;
+}
+
+.editor-title {
+  margin-left: 1.5rem; 
+  padding: 0.2rem;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+h4{
+  font-size: 15px;
+}
+
+.editor-title button  {
+  padding: 0px 16px;
+  margin-right: 1em;
+}
+
+.entity-wrapper {
+  
+}
+
+.entity-container .dropdown {
+  max-height: 0;
+  overflow: hidden;
+}
+
+.entity-container:active .dropdown {
+  max-height: 1000px;
+  overflow: visible;
+}
