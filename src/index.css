@@ -90,3 +90,9 @@ h4{
   pointer-events: auto; 
   cursor: pointer;
 }
+
+td {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

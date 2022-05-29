@@ -65,11 +65,11 @@ export const Editor = (props) => {
         displayName,
     } = props
 
-    const [sql, setSql] = useState('')
+    const [sql, setSql] = useState('select * from categories')
     const [dd, setdd] = useState('')
+    const [dd2, setdd2] = useState('')
     const [cols, setCols] = useState([])
-    const [flag, setFlag] = useState(0)
-
+    const [cols2, setCols2] = useState([])
 
     function handleDD (event) {
         var val = event.target.dataset.value
@@ -89,7 +89,6 @@ export const Editor = (props) => {
     }
 
     function handleChange (editor, data, value) {
-        console.log(editor, data, value)
         setSql(value)
     }
 
@@ -100,7 +99,7 @@ export const Editor = (props) => {
             tmp.push(val)
         else {
             tmp = tmp.filter((e)=>{
-                return e!==val;
+                return e!==val
             })
         }
         setCols(tmp)
@@ -111,13 +110,44 @@ export const Editor = (props) => {
     }
 
     function runQuery() {
-        if(sql==='')
-            alert("Kindly enter Query first");
+        var value = sql;
+        if(value==='')
+            alert("Kindly enter Query first")
         else {
-            if(flag===0)
-                setFlag(1);
-            else
-                setFlag(0);
+            value = value.replace("select ", "");
+            value = value.split("from");
+            if(value.length!==2)
+                return;
+
+            value[0] = value[0].trim();
+            value[1] = value[1].trim();
+            var ent = value[1];
+            var colArr=value[0].split(',').map(x=>x.trim());
+            if(colArr.length===1 && colArr[0]==="*") 
+                colArr = [];
+            console.log(colArr);
+
+            if(!entities.includes(ent)) {
+                return;
+            }
+        
+            var actCols = Object.keys(entData[ent][0]);
+            var idx, check = 1;
+
+            for(idx = 0; idx<colArr.length;idx++) {
+                check &= actCols.includes(colArr[idx]);
+            }
+            
+            if(!check) {
+                console.log('Column names cannot be found in the mentioned entity');
+                return;
+            }
+
+
+            setCols(colArr);
+            setdd(ent);
+            setCols2(colArr);
+            setdd2(ent);
         }
     }
 
@@ -149,7 +179,7 @@ export const Editor = (props) => {
                         <div className = "editor-container">
                             <div className = "editor-title">
                                 <h4>{displayName}</h4>
-                                <button className="btn btn-primary btn-sm"
+                                <button className="btn btn-primary btn-sm" 
                             onClick={runQuery}>Run</button>
                             </div>
                             <ControlledEditor 
@@ -167,25 +197,25 @@ export const Editor = (props) => {
                         </div>
                         <div className = "container-fluid">
                             <h4>Output</h4> 
-                            {(flag===0 || dd==='')? "Kindly enter a query": 
+                            {(dd2==='')? "Kindly enter a query": 
                             <Table striped bordered hover variant="dark">
                                 <thead>
                                     <tr>
-                                        {Object.keys(entData[dd][0]).map(x =>{
-                                            return (
+                                        {Object.keys(entData[dd2][0]).map(x =>{
+                                            return (cols2.includes(x) || cols2.length===0)? (
                                                 <th>{x}</th>
-                                            )
+                                            ): null;
                                         })}
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {entData[dd].map(item =>{
+                                    {entData[dd2].map(item =>{
                                         return (
                                             <tr>
                                                 {Object.keys(item).map(x => {
-                                                    return (
+                                                    return (cols2.includes(x) || cols2.length===0)? (
                                                         <td>{item[x]}</td>
-                                                    )    
+                                                    ): null;    
                                                 })}
                                             </tr>
                                         )
