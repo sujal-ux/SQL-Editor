@@ -11,6 +11,20 @@ body {
   background-color: rgba(8, 8, 8, 0.986);
   height: calc(100vh - 148px);
   color: white;   
+  position: relative;
+}
+
+.resizeable {
+  cursor: col-resize;
+  height: 100%;
+  right: 0;
+  top: 0;
+  width: 4px;
+  position: absolute;
+}
+
+.col1 h4{
+  text-transform: capitalize;
 }
 
 .col2 {
@@ -44,18 +58,35 @@ h4{
 .editor-title button  {
   padding: 0px 16px;
   margin-right: 1em;
+  background-color: #0D6EFD; 
 }
 
 .entity-wrapper {
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  color:rgba(222, 216, 216, 0.986)
+}
+
+.entity-container {
+  padding: 8px 6px;
+}
+
+.entity-container span {
+  margin: 8px;
+  cursor: pointer;
 }
 
 .entity-container .dropdown {
   max-height: 0;
-  overflow: hidden;
+  opacity: 0;
+  margin: 0px 18px;
+  pointer-events: none;
 }
 
-.entity-container:active .dropdown {
+.droppedDown {
   max-height: 1000px;
-  overflow: visible;
+  opacity: 1;
+  pointer-events: auto; 
+  cursor: pointer;
 }
