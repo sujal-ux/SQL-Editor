@@ -148,7 +148,6 @@ export const Editor = (props) => {
                 return;
             }
 
-
             setCols(colArr);
             setdd(ent);
             setCols2(colArr);
