@@ -5,9 +5,12 @@ export const Header = () => {
         <div>
             <nav className="navbar navbar-inverse">
             <div className="container-fluid">
-                <div className="navbar-header navbar-brand">
-                SQL EDitor
+                <div className="navbar-header">
+                    <div className = "navbar-brand">
+                        SQL Editor
+                    </div>
                 </div>
+                
             </div>
             </nav>
         </div>

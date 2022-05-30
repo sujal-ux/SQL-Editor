@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import categories from './data/categories.json'
-import region from './data/regions.json'
 import shippers from './data/shippers.json'
 import customers from './data/customers.json'
 import order_details from './data/order_details.json'
@@ -15,62 +14,16 @@ import Table from 'react-bootstrap/Table'
 import { Controlled as ControlledEditor } from 'react-codemirror2'
 
 export const Editor = (props) => {
-    // Entities column resize
-    const ref = useRef(null);
-    const refRight = useRef(null);
-    
-    useEffect(() => {
-        const resizeableEle = ref.current;
-        if(resizeableEle===null)
-            return;
-        const styles = window.getComputedStyle(resizeableEle);
-        let width = parseInt(styles.width, 10);
-        // let height = parseInt(styles.height, 10);
-        let x = 0;
-        
-        resizeableEle.style.top = "50px";
-        resizeableEle.style.left = "50px";
-
-        // resizer
-        const onMouseMoveRightResize=(event)=>{
-            const dx = event.clientX-x;
-            x = event.clientX;
-            width = width + dx;
-            resizeableEle.style.width = `${width}px`
-        }
-
-        const onMouseUpRightResize = (event)=>{
-            document.removeEventListener("mousemove", onMouseMoveRightResize);
-        }
-
-        const onMouseDownRightResize=(event)=>{
-            x = event.clientX;
-            resizeableEle.style.left = styles.left;
-            resizeableEle.style.right = null;
-            document.addEventListener("mousemove", onMouseMoveRightResize);
-            document.addEventListener("mouseup", onMouseUpRightResize);
-        } 
-
-        // Mouse down event listener
-        const resizerRight = refRight.current;
-        resizerRight.addEventListener("mousedown", onMouseDownRightResize); 
-
-        return () => {
-            resizerRight.removeEventListener("mousedown", onMouseDownRightResize);
-        }
-    }, [])
-    
-
-    const entities = ["categories", "customers", "order_details", "region", "shippers", "suppliers", "territories"] 
+    const entities = ["categories", "customers", "order_details", "shippers", "suppliers", "territories"] 
     const entData = {"categories": categories, "customers": customers, "order_details": order_details, 
-    "region": region, "shippers": shippers, "suppliers": suppliers, "territories": territories}
+     "shippers": shippers, "suppliers": suppliers, "territories": territories}
 
     const {
         language,
         displayName,
     } = props
 
-    const [sql, setSql] = useState('select * from categories')
+    const [sql, setSql] = useState('')
     const [dd, setdd] = useState('')
     const [dd2, setdd2] = useState('')
     const [cols, setCols] = useState([])
@@ -158,19 +111,21 @@ export const Editor = (props) => {
     return (
         <div className = "container-fluid">
             <div className = "row">
-                <div ref = {refRight} className = "col-lg-3 col1">
+                <div className = "col-lg-2 col1">
                     <h4>Entities</h4>
                     <div className="entity-wrapper">
                         {entities.map(entity => {
                             return (
                                 <div className = "entity-container">
-                                    {/* <i className="fa fa-angle-right"></i> */}
-                                    <i className="fas fa-folder"></i><span>
+                                    <div className = {(dd===entity)? "bgChange entHead":"entHead"}>
+                                        <i className="fa fa-angle-right rightIcon"></i>
+                                        <i className="fas fa-folder"></i><span>
                                         <a data-value={entity} onClick={handleDD}>{entity}</a></span>
+                                    </div>
                                     <div className={(dd===entity)? "droppedDown":"dropdown"}>
                                         {Object.keys(entData[entity][0]).map(x=>{
                                             return (
-                                                <div className="dropdown-item" onClick={updQuery}><i className="fas fa-file"></i>{x}</div>
+                                                <div className={(cols.includes(x))?"dropdown-item bgChange": "dropdown-item"} onClick={updQuery}><i className="fas fa-file"></i>{x}</div>
                                             )
                                         })}
                                     </div>
@@ -178,9 +133,8 @@ export const Editor = (props) => {
                             )
                         })}
                     </div>
-                    <div className="resizeable"></div>
                 </div>
-                <div className = "col-lg-9 col2">
+                <div className = "col-lg-10 col2">
                         <div className = "editor-container">
                             <div className = "editor-title">
                                 <h4>{displayName}</h4>
@@ -201,7 +155,8 @@ export const Editor = (props) => {
                             />
                         </div>
                         <div className = "container-fluid outputBox">
-                            <h4>Output</h4> 
+                            <h4>Output</h4>
+                            <div className="tableBox"> 
                             {(dd2==='')? 
                                 <div className="text">
                                     Click <b>"Run"</b> to execute the SQL statement above.<br/><br/>
@@ -234,7 +189,8 @@ export const Editor = (props) => {
                                         }
                                     </tbody>
                                 </Table>
-                            }
+                                }
+                            </div>
                         </div>
                 </div>
             </div>
