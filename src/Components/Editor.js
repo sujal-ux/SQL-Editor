@@ -1,9 +1,13 @@
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import categories from './data/categories.json'
 import region from './data/regions.json'
-import employees from './data/employees.json'
 import shippers from './data/shippers.json'
+import customers from './data/customers.json'
+import order_details from './data/order_details.json'
+import suppliers from './data/suppliers.json'
+import territories from './data/territories.json'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material.css'
 import 'codemirror/mode/sql/sql'
@@ -57,8 +61,9 @@ export const Editor = (props) => {
     }, [])
     
 
-    const entities = ["categories", "region", "employees", "shippers"] 
-    const entData = {"categories": categories, "region": region, "employees": employees, "shippers": shippers}
+    const entities = ["categories", "customers", "order_details", "region", "shippers", "suppliers", "territories"] 
+    const entData = {"categories": categories, "customers": customers, "order_details": order_details, 
+    "region": region, "shippers": shippers, "suppliers": suppliers, "territories": territories}
 
     const {
         language,
@@ -160,12 +165,13 @@ export const Editor = (props) => {
                         {entities.map(entity => {
                             return (
                                 <div className = "entity-container">
-                                    <i className="fas fa-file"></i><span><a data-value={entity} 
-                                    onClick={handleDD}>{entity}</a></span>
+                                    {/* <i className="fa fa-angle-right"></i> */}
+                                    <i className="fas fa-folder"></i><span>
+                                        <a data-value={entity} onClick={handleDD}>{entity}</a></span>
                                     <div className={(dd===entity)? "droppedDown":"dropdown"}>
                                         {Object.keys(entData[entity][0]).map(x=>{
                                             return (
-                                                <div className="dropdown-item" onClick={updQuery}>{x}</div>
+                                                <div className="dropdown-item" onClick={updQuery}><i className="fas fa-file"></i>{x}</div>
                                             )
                                         })}
                                     </div>
@@ -195,34 +201,40 @@ export const Editor = (props) => {
                                 }}
                             />
                         </div>
-                        <div className = "container-fluid">
+                        <div className = "container-fluid outputBox">
                             <h4>Output</h4> 
-                            {(dd2==='')? "Kindly enter a query": 
-                            <Table striped bordered hover variant="dark">
-                                <thead>
-                                    <tr>
-                                        {Object.keys(entData[dd2][0]).map(x =>{
-                                            return (cols2.includes(x) || cols2.length===0)? (
-                                                <th>{x}</th>
-                                            ): null;
-                                        })}
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {entData[dd2].map(item =>{
-                                        return (
-                                            <tr>
-                                                {Object.keys(item).map(x => {
-                                                    return (cols2.includes(x) || cols2.length===0)? (
-                                                        <td>{item[x]}</td>
-                                                    ): null;    
-                                                })}
-                                            </tr>
-                                        )
-                                    })
-                                    }
-                                </tbody>
-                            </Table>
+                            {(dd2==='')? 
+                                <div className="text">
+                                    Click <b>"Run"</b> to execute the SQL statement above.<br/><br/>
+                                    The menu to the left displays the database, from which entities can be chosen.<br/><br/>
+                                    SQL queries can be entered directly in the input box, or <br/>
+                                    clicking on the entities and columns also fills the input box with required query 
+                                </div> : 
+                                <Table striped bordered hover variant="dark">
+                                    <thead>
+                                        <tr>
+                                            {Object.keys(entData[dd2][0]).map(x =>{
+                                                return (cols2.includes(x) || cols2.length===0)? (
+                                                    <th>{x}</th>
+                                                ): null;
+                                            })}
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {entData[dd2].map(item =>{
+                                            return (
+                                                <tr>
+                                                    {Object.keys(item).map(x => {
+                                                        return (cols2.includes(x) || cols2.length===0)? (
+                                                            <td>{item[x]}</td>
+                                                        ): null;    
+                                                    })}
+                                                </tr>
+                                            )
+                                        })
+                                        }
+                                    </tbody>
+                                </Table>
                             }
                         </div>
                 </div>

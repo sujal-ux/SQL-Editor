@@ -5,8 +5,8 @@ export const Header = () => {
         <div>
             <nav className="navbar navbar-inverse">
             <div className="container-fluid">
-                <div className="navbar-header">
-                <a className="navbar-brand" href="https://www.w3schools.com/bootstrap/bootstrap_grid_system.asp">SQL EDitor</a>
+                <div className="navbar-header navbar-brand">
+                SQL EDitor
                 </div>
             </div>
             </nav>
