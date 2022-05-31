@@ -1,23 +1,25 @@
 import React, { useState, useEffect } from 'react'
+
+import 'codemirror/lib/codemirror.css'
+import 'codemirror/theme/material.css'
+import 'codemirror/mode/sql/sql'
+
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
+import Table from 'react-bootstrap/Table'
+import { Controlled as ControlledEditor } from 'react-codemirror2'
+
 import categories from './data/categories.json'
 import shippers from './data/shippers.json'
 import customers from './data/customers.json'
 import order_details from './data/order_details.json'
 import suppliers from './data/suppliers.json'
 import territories from './data/territories.json'
-import Tabs from 'react-bootstrap/Tabs'
-import Tab from 'react-bootstrap/Tab'
-import 'codemirror/lib/codemirror.css'
-import 'codemirror/theme/material.css'
-import 'codemirror/mode/sql/sql'
-import Table from 'react-bootstrap/Table'
-import { Controlled as ControlledEditor } from 'react-codemirror2'
-import { tab } from '@testing-library/user-event/dist/tab'
 
 export const Editor = (props) => {
     const entities = ["categories", "customers", "order_details", "shippers", "suppliers", "territories"] 
     const entData = {"categories": categories, "customers": customers, "order_details": order_details, 
-     "shippers": shippers, "suppliers": suppliers, "territories": territories}
+                    "shippers": shippers, "suppliers": suppliers, "territories": territories}
 
 
     const [sql, setSql] = useState("select * from categories")
@@ -42,12 +44,10 @@ export const Editor = (props) => {
     function handleDD (event) {
         var val = event.target.dataset.value
         setQuery(val)
-        if(dd===val) {
+        if(dd===val) 
             setdd('')
-        }
-        else {
+        else 
             setdd(val)
-        }
     }
 
     function setQuery (val) {
@@ -78,7 +78,6 @@ export const Editor = (props) => {
 
     function handleTab (event) {
         var tmpIDX = parseInt(event.target.dataset.rrUiEventKey)
-        console.log(tmpIDX)
         setIdx(tmpIDX)        
     }
 
@@ -91,7 +90,6 @@ export const Editor = (props) => {
             setdd("")
             return;
         }
-
         value[0] = value[0].trim();
         value[1] = value[1].trim();
         var ent = value[1];
@@ -113,7 +111,6 @@ export const Editor = (props) => {
         }
         
         if(!check) {
-            console.log('Column names cannot be found in the mentioned entity');
             setCols([])
             setdd("")
             return;
@@ -155,15 +152,14 @@ export const Editor = (props) => {
                         <div className = "editor-container">
                             <div className = "editor-title">
                                 <Tabs defaultActiveKey='0' transition={false} onClick={handleTab}>
-                                {tabData.map((x, i)=> {
-                                    return (
-                                            <Tab eventKey={i} title={<div className="tabIcon">
-                                                <i className="fa fa-code"></i>Query #{i}</div>}></Tab>
-                                    )
-                                })}
+                                    {tabData.map((x, i)=> {
+                                        return (
+                                                <Tab eventKey={i} title={<div className="tabIcon">
+                                                    <i className="fa fa-code"></i>Query #{i}</div>}></Tab>
+                                        )
+                                    })}
                                 </Tabs>
-                                <button className="btn btn-primary btn-sm" 
-                            onClick={runQuery}>Run</button>
+                                <button className="btn btn-primary btn-sm" onClick={runQuery}>Run</button>
                             </div>
                             <ControlledEditor 
                                 onBeforeChange = {handleChange}
@@ -209,8 +205,7 @@ export const Editor = (props) => {
                                                     })}
                                                 </tr>
                                             )
-                                        })
-                                        }
+                                        })}
                                     </tbody>
                                 </Table>
                                 }
