@@ -37,10 +37,6 @@ body {
   overflow: hidden;
 }
 
-.react-codemirror2 .CodeMirror:nth-child(1) {
-  display: none;
-}
-
 .CodeMirror {
   height: 150px !important;
 }
