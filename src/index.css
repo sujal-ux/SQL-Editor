@@ -13,11 +13,6 @@ body {
   background-color: #2961d1a8;
 }
 
-.navbar {
-  margin-bottom: 0px;
-  border-radius: 0px;
-}
-
 .col1 {
   background-color: rgba(8, 8, 8, 0.986);
   height: calc(100vh - 132px);
@@ -42,9 +37,9 @@ body {
   overflow: hidden;
 }
 
-/* .react-codemirror2 .CodeMirror:nth-child(1) {
+.react-codemirror2 .CodeMirror:nth-child(1) {
   display: none;
-} */
+}
 
 .CodeMirror {
   height: 150px !important;
@@ -60,7 +55,7 @@ body {
 
 h4{
   font-size: 16px;
-  font-weight: 200;
+  font-weight: 600;
 }
 
 .editor-title button  {
@@ -167,5 +162,86 @@ td {
 
 .footC {
   max-height: 70px;
-  padding: 20px;
+  padding: 23px 0px 20px 0px;
+  display: flex;
+  justify-content: space-between;
 }
+
+.footC i{
+  font-size: 20px;
+  margin: 0px 10px;
+  cursor: pointer;
+  color: white;
+}
+
+.navbar {
+  margin-bottom: 0px;
+  border-radius: 0px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.navbar-brand {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  font-size: 22px;
+} 
+
+.navbar-header {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.navbar-header img{
+  width: 110px;
+  height: 30px; 
+}
+
+.nav-tabs {
+  border: none !important;
+  margin-top: 10px;
+  display: flex;
+}
+
+.name .mainT {
+  font-weight: 700;
+}
+
+Tab {
+  color: white;
+  background-color: black;
+}
+
+button.nav-link {
+  border: none;
+  height: 30px;
+  color: rgb(200, 197, 197) !important;
+  border: none !important;
+}
+
+button.nav-link.active {
+  color: white !important;
+  background-color: #263238 !important;
+  border: none !important;
+  font-weight: 600;
+} 
+
+button.nav-link:hover {
+  border: none !important;
+  outline: none !important;
+}
+
+.tabIcon {
+  display: flex;
+  pointer-events: none;
+}
+
+.tabIcon i{
+  color: #0D6EFD;
+  width: 10px;
+  height: 10px;
+  margin: 4px 16px 0px 0px;
+}
+

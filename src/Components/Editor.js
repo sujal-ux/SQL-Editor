@@ -1,33 +1,43 @@
-import React, { useState } from 'react'
-import { useRef, useEffect } from 'react'
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React, { useState, useEffect } from 'react'
 import categories from './data/categories.json'
 import shippers from './data/shippers.json'
 import customers from './data/customers.json'
 import order_details from './data/order_details.json'
 import suppliers from './data/suppliers.json'
 import territories from './data/territories.json'
+import Tabs from 'react-bootstrap/Tabs'
+import Tab from 'react-bootstrap/Tab'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/material.css'
 import 'codemirror/mode/sql/sql'
 import Table from 'react-bootstrap/Table'
 import { Controlled as ControlledEditor } from 'react-codemirror2'
+import { tab } from '@testing-library/user-event/dist/tab'
 
 export const Editor = (props) => {
     const entities = ["categories", "customers", "order_details", "shippers", "suppliers", "territories"] 
     const entData = {"categories": categories, "customers": customers, "order_details": order_details, 
      "shippers": shippers, "suppliers": suppliers, "territories": territories}
 
-    const {
-        language,
-        displayName,
-    } = props
 
-    const [sql, setSql] = useState('')
+    const [sql, setSql] = useState("select * from categories")
     const [dd, setdd] = useState('')
     const [dd2, setdd2] = useState('')
     const [cols, setCols] = useState([])
     const [cols2, setCols2] = useState([])
+    const [idx, setIdx] = useState(0)
+    const [tabData, setData] = useState(["", "", "", "", ""])
+
+    useEffect(()=>{
+        var tmp = [...tabData]
+        tmp[idx] = sql
+        setData(tmp)
+    }, [sql])
+
+    useEffect(()=> {
+        setSql(tabData[idx])
+        runQuery(tabData[idx])
+    }, [idx])
 
     function handleDD (event) {
         var val = event.target.dataset.value
@@ -36,7 +46,6 @@ export const Editor = (props) => {
             setdd('')
         }
         else {
-            console.log(val)
             setdd(val)
         }
     }
@@ -47,7 +56,7 @@ export const Editor = (props) => {
     }
 
     function handleChange (editor, data, value) {
-        setSql(value)
+        setSql(value) 
     }
 
     function updQuery (event) {
@@ -67,45 +76,53 @@ export const Editor = (props) => {
             setSql("select "+tmp.join(', ')+" from "+dd)
     }
 
-    function runQuery() {
-        var value = sql;
-        if(value==='')
-            alert("Kindly enter Query first")
-        else {
-            value = value.replace("select ", "");
-            value = value.split("from");
-            if(value.length!==2)
-                return;
+    function handleTab (event) {
+        var tmpIDX = parseInt(event.target.dataset.rrUiEventKey)
+        console.log(tmpIDX)
+        setIdx(tmpIDX)        
+    }
 
-            value[0] = value[0].trim();
-            value[1] = value[1].trim();
-            var ent = value[1];
-            var colArr=value[0].split(',').map(x=>x.trim());
-            if(colArr.length===1 && colArr[0]==="*") 
-                colArr = [];
-            console.log(colArr);
-
-            if(!entities.includes(ent)) {
-                return;
-            }
-        
-            var actCols = Object.keys(entData[ent][0]);
-            var idx, check = 1;
-
-            for(idx = 0; idx<colArr.length;idx++) {
-                check &= actCols.includes(colArr[idx]);
-            }
-            
-            if(!check) {
-                console.log('Column names cannot be found in the mentioned entity');
-                return;
-            }
-
-            setCols(colArr);
-            setdd(ent);
-            setCols2(colArr);
-            setdd2(ent);
+    function runQuery(arg) {
+        var value = (typeof(arg)==='string')? arg : sql;
+        value = value.replace("select ", "");
+        value = value.split(" from ");
+        if(value.length!==2) {
+            setCols([])
+            setdd("")
+            return;
         }
+
+        value[0] = value[0].trim();
+        value[1] = value[1].trim();
+        var ent = value[1];
+        var colArr=value[0].split(',').map(x=>x.trim());
+        if(colArr.length===1 && colArr[0]==="*") 
+            colArr = [];
+
+        if(!entities.includes(ent)) {
+            setCols([])
+            setdd("")
+            return;
+        }
+    
+        var actCols = Object.keys(entData[ent][0]);
+        var idx, check = 1;
+
+        for(idx = 0; idx<colArr.length;idx++) {
+            check &= actCols.includes(colArr[idx]);
+        }
+        
+        if(!check) {
+            console.log('Column names cannot be found in the mentioned entity');
+            setCols([])
+            setdd("")
+            return;
+        }
+
+        setCols(colArr);
+        setdd(ent);
+        setCols2(colArr);
+        setdd2(ent);
     }
 
     return (
@@ -137,7 +154,14 @@ export const Editor = (props) => {
                 <div className = "col-lg-10 col2">
                         <div className = "editor-container">
                             <div className = "editor-title">
-                                <h4>{displayName}</h4>
+                                <Tabs defaultActiveKey='0' transition={false} onClick={handleTab}>
+                                {tabData.map((x, i)=> {
+                                    return (
+                                            <Tab eventKey={i} title={<div className="tabIcon">
+                                                <i className="fa fa-code"></i>Query #{i}</div>}></Tab>
+                                    )
+                                })}
+                                </Tabs>
                                 <button className="btn btn-primary btn-sm" 
                             onClick={runQuery}>Run</button>
                             </div>
@@ -146,7 +170,7 @@ export const Editor = (props) => {
                                 value = {sql}
                                 className = "code-mirror-wrapper"
                                 options = {{
-                                    mode: language, 
+                                    mode: props.language, 
                                     lineWrapping: true,
                                     lint: true,
                                     theme: 'material',
@@ -160,7 +184,7 @@ export const Editor = (props) => {
                             {(dd2==='')? 
                                 <div className="text">
                                     Click <b>"Run"</b> to execute the SQL statement above.<br/><br/>
-                                    The menu to the left displays the database, from which entities can be chosen.<br/><br/>
+                                    The menu on the left displays the database, from which entities can be chosen.<br/><br/>
                                     SQL queries can be entered directly in the input box, or <br/>
                                     clicking on the entities and columns also fills the input box with required query 
                                 </div> : 

@@ -11,7 +11,6 @@ function App() {
         <Header/>
         <Editor
         language = "sql"
-        displayName  = "Input"
         />
         <Footer/>
     </div>
