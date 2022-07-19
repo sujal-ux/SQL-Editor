@@ -96,7 +96,7 @@ export const Editor = (props) => {
         var colArr=value[0].split(',').map(x=>x.trim());
         if(colArr.length===1 && colArr[0]==="*") 
             colArr = [];
-
+            
         if(!entities.includes(ent)) {
             setCols([])
             setdd("")
@@ -139,7 +139,8 @@ export const Editor = (props) => {
                                     <div className={(dd===entity)? "droppedDown":"dropdown"}>
                                         {Object.keys(entData[entity][0]).map(x=>{
                                             return (
-                                                <div className={(cols.includes(x))?"dropdown-item bgChange": "dropdown-item"} onClick={updQuery}><i className="fas fa-file"></i>{x}</div>
+                                                <div className={(cols.includes(x))?"dropdown-item bgChange": "dropdown-item"} 
+                                                onClick={updQuery}><i className="fas fa-file"></i>{x}</div>
                                             )
                                         })}
                                     </div>

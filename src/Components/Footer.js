@@ -8,7 +8,7 @@ export const Footer = () => {
                 <div>
                     <a href="https://github.com/sujal-ux/SQL-Editor"><i className="fa-brands fa-github"></i></a>
                     <a href="mailto:sumo12082000@gmail.com"><i className="fa fa-envelope"></i></a>
-                    <a href="https://atlan.com/"><i className="fa fa-external-link"></i></a>
+
                 </div>
             </div>
         </>

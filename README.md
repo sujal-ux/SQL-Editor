@@ -18,7 +18,7 @@ npm run start
 ```
 
 ## Demo
-![demo workflow](media/SqlEditorRecording.gif)
+![demo workflow](media/EditorRecording.gif)
 
 ## Features
 - Includes code-editor to take user input of queries  
